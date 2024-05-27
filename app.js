@@ -26,9 +26,9 @@ const initializeDBAndServer = async () => {
 
 initializeDBAndServer()
 
-// get player
+// AP1 1
 
-const convertDbObjectToResponseObject = dbObject => {
+const convertDbObject = dbObject => {
   return {
     playerId: dbObject.player_id,
     playerName: dbObject.player_name,
@@ -44,23 +44,21 @@ app.get('/players/', async (request, response) => {
      `
   const playerList = await db.all(getPlayerQuery)
 
-  response.send(
-    playerList.map(eachPlayer => convertDbObjectToResponseObject(eachPlayer)),
-  )
+  response.send(playerList.map(eachPlayer => convertDbObject(eachPlayer)))
 })
 
-// add players
+// add 2
 
 app.post('/players/', async (request, response) => {
   const getDetails = request.body
-  const {playerName, jerseyNumber, role} = getDetails
+  const {player_name, jersey_number, role} = getDetails
 
   const addPlayerQuery = `
     Insert into 
     cricket_team(playerName, jerseyNumber, role)
     values(
-     ${playerName},
-     ${jerseyNumber},
+     ${player_name},
+     ${jersey_number},
      ${role}
     );`
   const dbResponse = await db.run(addPlayerQuery)
@@ -93,13 +91,13 @@ app.get('/players/:playerId/', async (request, response) => {
 app.put('/players/:playerId/', async (request, response) => {
   const {playerId} = request.params
   const getBody = request.body
-  const {playerName, jerseyNumber, role} = getBody
+  const {player_name, jersey_number, role} = getBody
   const updatePlayerQuery = `
   update
     cricket_team
   set 
-    player_name:${playerName},
-    jersey_number: ${jerseyNumber},
+    player_name:${player_name},
+    jersey_number: ${jersey_number},
     role: ${role} 
   where
     player_id = ${playerId} ;`
@@ -107,7 +105,7 @@ app.put('/players/:playerId/', async (request, response) => {
   response.send('Player Details Updated')
 })
 
-// delete api
+// API 5
 app.delete('/players/:playerId/', async (request, response) => {
   const {playersId} = request.params
   const deleteQuery = `
